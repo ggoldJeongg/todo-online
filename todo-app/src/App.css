@@ -1,0 +1,14 @@
+.App {
+  text-align: center;
+  width: 20rem;
+  margin: 0 auto;
+  padding: 1rem;
+  background-color: gainsboro;
+}
+
+.todoContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+}
