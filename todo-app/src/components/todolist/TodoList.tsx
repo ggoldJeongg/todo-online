@@ -2,7 +2,7 @@ import { useState } from "react";
 import CreateTodo from "./CreateTodo";
 import TodoItem from "./TodoItem";
 
-interface TList {
+export interface TList {
   id: number;
   text: string;
   completed: boolean;
@@ -10,18 +10,7 @@ interface TList {
 
 export default function TodoList() {
   const [inputText, setInputText] = useState("");
-  const [todoList, setTodoList] = useState<TList[]>([
-    {
-      id: 1,
-      text: "할일 1",
-      completed: false,
-    },
-    {
-      id: 2,
-      text: "할일 2",
-      completed: false,
-    },
-  ]);
+  const [todoList, setTodoList] = useState<TList[]>([]);
 
   const textTypingHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputText(e.target.value);
@@ -42,6 +31,17 @@ export default function TodoList() {
     setTodoList(todoList.filter((TodoItem) => TodoItem.id !== id));
   };
 
+  const textUpdateHandler = (newTodo: TList): void => {
+    const newTodoList = todoList.map((item) => {
+      if (item.id === newTodo.id) {
+        return newTodo;
+      } else {
+        return item;
+      }
+    });
+    setTodoList(newTodoList);
+  };
+
   return (
     <div className="todoListContainer">
       {todoList.map((item) => (
@@ -50,6 +50,7 @@ export default function TodoList() {
           text={item.text}
           completed={item.completed}
           onClickDelete={textDeleteHandler}
+          onClickUpdate={textUpdateHandler}
         />
       ))}
       <CreateTodo
