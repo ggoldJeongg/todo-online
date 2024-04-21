@@ -38,10 +38,19 @@ export default function TodoList() {
     setInputText("");
   };
 
+  const textDeleteHandler = (id: number) => {
+    setTodoList(todoList.filter((TodoItem) => TodoItem.id !== id));
+  };
+
   return (
     <div className="todoListContainer">
       {todoList.map((item) => (
-        <TodoItem key={item.id} text={item.text} completed={item.completed} />
+        <TodoItem
+          id={item.id}
+          text={item.text}
+          completed={item.completed}
+          onClickDelete={textDeleteHandler}
+        />
       ))}
       <CreateTodo
         onChange={textTypingHandler}
