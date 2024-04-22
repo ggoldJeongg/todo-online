@@ -1,23 +1,51 @@
-import React from "react";
-import TodoList from "./components/todolist/TodoList";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { SignUp } from "./pages/signup/signUp";
-import { Login } from "./pages/signup/login";
-import "./App.css";
+import React, { useEffect, useState } from "react";
+import { firebaseAuth, fireStoreJob } from "./initFirebase";
+import { onAuthStateChanged } from "firebase/auth";
+import { collection, query, where, getDocs } from "firebase/firestore";
+import { AppRouter } from "./routes/Router";
+import { UserInterface } from "./interfaces/user.interface";
 
-function App() {
+const App = () => {
+  const [init, setInit] = useState<boolean>(false);
+  const [isLogin, setIsLogin] = useState<boolean>(false);
+  const [userInfo, setUserInfo] = useState<UserInterface | null>(null);
+  useEffect(() => {
+    onAuthStateChanged(firebaseAuth, async (user) => {
+      if (user) {
+        // 'users' collection에서 유저 정보 가져오기
+        const q = query(
+          collection(fireStoreJob, "users"),
+          where("uid", "==", user.uid)
+        );
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach((doc) => {
+          const data = doc.data();
+          // 유저 정보 저장
+          setUserInfo({
+            uid: data.uid,
+            email: data.email,
+            displayName: data.displayName,
+            date_created: data.date_created,
+          });
+        });
+        setIsLogin(true);
+      } else {
+        setIsLogin(false);
+      }
+      setInit(true);
+    });
+  }, []);
+
   return (
-    <div className="App">
-      <Router>
-        <Routes>
-          <Route path="/todolist" element={<TodoList />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/" element={<Login />} />
-        </Routes>
-      </Router>
-    </div>
+    <>
+      {" "}
+      {init ? (
+        <AppRouter isLogin={isLogin} userInfo={userInfo} />
+      ) : (
+        "Initializing..."
+      )}
+    </>
   );
-}
+};
 
 export default App;

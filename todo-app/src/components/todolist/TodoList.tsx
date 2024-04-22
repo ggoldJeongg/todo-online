@@ -1,6 +1,11 @@
 import { useState } from "react";
 import CreateTodo from "./CreateTodo";
 import TodoItem from "./TodoItem";
+import { UserInterface } from "../../interfaces/user.interface";
+
+export interface TodoListProps {
+  userInfo: UserInterface | null;
+}
 
 export interface TList {
   id: number;
@@ -8,7 +13,7 @@ export interface TList {
   completed: boolean;
 }
 
-export default function TodoList() {
+export default function TodoList({ userInfo }: TodoListProps) {
   const [inputText, setInputText] = useState("");
   const [todoList, setTodoList] = useState<TList[]>([]);
 
