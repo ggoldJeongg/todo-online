@@ -40,19 +40,8 @@ export default function TodoList({ userInfo }: TodoListProps) {
     }
   }, [userInfo]);
 
-  const textDeleteHandler = (id: string) => {
+  const textDeleteHandler = async (id: string) => {
     setTodoList(todoList.filter((item) => item.id !== id));
-  };
-
-  const textUpdateHandler = (newTodo: TList): void => {
-    const newTodoList = todoList.map((item) => {
-      if (item.id === newTodo.id) {
-        return newTodo;
-      } else {
-        return item;
-      }
-    });
-    setTodoList(newTodoList);
   };
 
   return (
@@ -69,8 +58,7 @@ export default function TodoList({ userInfo }: TodoListProps) {
             id={item.id}
             text={item.text}
             status={item.status}
-            onClickDelete={textDeleteHandler}
-            onClickUpdate={textUpdateHandler}
+            onDelete={textDeleteHandler}
           />
         ))}
         <CreateTodo

@@ -1,22 +1,19 @@
 import { useState } from "react";
-import { TList } from "./TodoList";
-import { updateDoc, doc } from "firebase/firestore";
+import { updateDoc, doc, deleteDoc } from "firebase/firestore";
 import { fireStoreJob } from "../../initFirebase";
 
 interface TodoItemProps {
   id: string;
   text: string;
   status: string;
-  onClickDelete(id: string): void;
-  onClickUpdate(updatedTodoItem: TList): void;
+  onDelete(id: string): void;
 }
 
 export default function TodoItem({
   id,
   text,
   status,
-  onClickDelete,
-  onClickUpdate,
+  onDelete,
 }: TodoItemProps) {
   const [isUpdating, setIsUpdating] = useState<boolean>(false);
   const [updatedText, setUpdatedText] = useState<string>(text);
@@ -25,14 +22,16 @@ export default function TodoItem({
     setUpdatedText(event.target.value);
   };
 
-  const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const updatedTodoItem = {
+    const ref = doc(fireStoreJob, "todos", id);
+
+    await updateDoc(ref, {
       id: id,
       text: updatedText,
       status: "ACTIVE",
-    };
-    onClickUpdate(updatedTodoItem);
+    });
+
     setIsUpdating(false);
   };
 
@@ -41,6 +40,12 @@ export default function TodoItem({
     await updateDoc(ref, {
       status: "DONE",
     });
+  };
+
+  const onClickDelete = async () => {
+    const ref = doc(fireStoreJob, "todos", id);
+    await deleteDoc(ref);
+    onDelete(id);
   };
 
   return (
@@ -59,7 +64,7 @@ export default function TodoItem({
             <button type="button" onClick={() => setIsUpdating(true)}>
               수정
             </button>
-            <button type="button" onClick={() => onClickDelete(id)}>
+            <button type="button" onClick={onClickDelete}>
               삭제
             </button>
           </div>
