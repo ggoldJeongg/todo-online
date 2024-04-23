@@ -2,10 +2,10 @@ import { useState } from "react";
 import { TList } from "./TodoList";
 
 interface TodoItemProps {
-  id: number;
+  id: string;
   text: string;
   completed: boolean;
-  onClickDelete(id: number): void;
+  onClickDelete(id: string): void;
   onClickUpdate(updatedTodoItem: TList): void;
 }
 
