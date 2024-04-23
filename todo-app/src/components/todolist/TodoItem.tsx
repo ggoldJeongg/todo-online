@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { TList } from "./TodoList";
+import { updateDoc, doc } from "firebase/firestore";
+import { fireStoreJob } from "../../initFirebase";
 
 interface TodoItemProps {
   id: string;
   text: string;
-  completed: boolean;
+  status: string;
   onClickDelete(id: string): void;
   onClickUpdate(updatedTodoItem: TList): void;
 }
@@ -12,7 +14,7 @@ interface TodoItemProps {
 export default function TodoItem({
   id,
   text,
-  completed,
+  status,
   onClickDelete,
   onClickUpdate,
 }: TodoItemProps) {
@@ -28,17 +30,30 @@ export default function TodoItem({
     const updatedTodoItem = {
       id: id,
       text: updatedText,
-      completed: completed,
+      status: "ACTIVE",
     };
     onClickUpdate(updatedTodoItem);
     setIsUpdating(false);
+  };
+
+  const onClickComplete = async () => {
+    const ref = doc(fireStoreJob, "todos", id);
+    await updateDoc(ref, {
+      status: "DONE",
+    });
   };
 
   return (
     <div>
       {!isUpdating ? (
         <li className="todoContainer">
-          {completed ? <button>완료됨</button> : <button>완료하기</button>}
+          {status === "DONE" ? (
+            <button disabled>완료됨</button>
+          ) : (
+            <button onClick={onClickComplete} id={id}>
+              완료하기
+            </button>
+          )}
           <p>{text}</p>
           <div className="buttonContainer">
             <button type="button" onClick={() => setIsUpdating(true)}>

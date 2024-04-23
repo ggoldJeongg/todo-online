@@ -12,7 +12,7 @@ export interface TodoListProps {
 export interface TList {
   id: string;
   text: string;
-  completed: boolean;
+  status: string;
 }
 
 export default function TodoList({ userInfo }: TodoListProps) {
@@ -27,10 +27,12 @@ export default function TodoList({ userInfo }: TodoListProps) {
       );
 
       const unsubscribe = onSnapshot(q, (querySnapshot) => {
-        const todos = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...(doc.data() as Omit<TList, "id">),
-        }));
+        const todos = querySnapshot.docs
+          .map((doc) => ({
+            id: doc.id,
+            ...(doc.data() as Omit<TList, "id">),
+          }))
+          .filter((todo) => todo.status !== "DONE");
         setTodoList(todos);
       });
 
@@ -66,7 +68,7 @@ export default function TodoList({ userInfo }: TodoListProps) {
           <TodoItem
             id={item.id}
             text={item.text}
-            completed={item.completed}
+            status={item.status}
             onClickDelete={textDeleteHandler}
             onClickUpdate={textUpdateHandler}
           />
