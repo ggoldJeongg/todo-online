@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import CreateTodo from "./CreateTodo";
 import TodoItem from "./TodoItem";
-import { collection, query, onSnapshot } from "firebase/firestore";
+import { collection, query, where, onSnapshot } from "firebase/firestore";
 import { UserInterface } from "../../interfaces/user.interface";
 import { fireStoreJob } from "../../initFirebase";
 
@@ -20,17 +20,23 @@ export default function TodoList({ userInfo }: TodoListProps) {
   const [todoList, setTodoList] = useState<TList[]>([]);
 
   useEffect(() => {
-    const q = query(collection(fireStoreJob, "todos"));
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      const todos = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...(doc.data() as Omit<TList, "id">),
-      }));
-      setTodoList(todos);
-    });
+    if (userInfo) {
+      const q = query(
+        collection(fireStoreJob, "todos"),
+        where("uid", "==", userInfo.uid)
+      );
 
-    return () => unsubscribe();
-  }, []);
+      const unsubscribe = onSnapshot(q, (querySnapshot) => {
+        const todos = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...(doc.data() as Omit<TList, "id">),
+        }));
+        setTodoList(todos);
+      });
+
+      return () => unsubscribe();
+    }
+  }, [userInfo]);
 
   const textDeleteHandler = (id: string) => {
     setTodoList(todoList.filter((item) => item.id !== id));
