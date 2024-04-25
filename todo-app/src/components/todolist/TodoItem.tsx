@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { updateDoc, doc, deleteDoc } from "firebase/firestore";
 import { fireStoreJob } from "../../initFirebase";
+import { TodoText, TodoContainer } from "../../styles/TodoItem.styled";
 
 interface TodoItemProps {
   id: string;
   text: string;
   status: string;
   onDelete(id: string): void;
+  category: string;
 }
 
 export default function TodoItem({
@@ -51,15 +53,15 @@ export default function TodoItem({
   return (
     <div>
       {!isUpdating ? (
-        <li className="todoContainer">
-          {status === "DONE" ? (
-            <button disabled>완료됨</button>
-          ) : (
-            <button onClick={onClickComplete} id={id}>
-              완료하기
-            </button>
-          )}
-          <p>{text}</p>
+        <TodoContainer>
+          <div className="buttonContainer">
+            {status !== "DONE" && (
+              <button onClick={onClickComplete} id={id}>
+                완료하기
+              </button>
+            )}
+          </div>
+          <TodoText status={status}>{text}</TodoText>
           <div className="buttonContainer">
             <button type="button" onClick={() => setIsUpdating(true)}>
               수정
@@ -68,9 +70,9 @@ export default function TodoItem({
               삭제
             </button>
           </div>
-        </li>
+        </TodoContainer>
       ) : (
-        <li className="todoContainer">
+        <TodoContainer>
           <form onSubmit={handleFormSubmit}>
             <input
               type="text"
@@ -84,7 +86,7 @@ export default function TodoItem({
               </button>
             </div>
           </form>
-        </li>
+        </TodoContainer>
       )}
     </div>
   );

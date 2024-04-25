@@ -13,32 +13,42 @@ export interface TList {
   id: string;
   text: string;
   status: string;
+  category: string;
 }
 
 export default function TodoList({ userInfo }: TodoListProps) {
   const [inputText, setInputText] = useState("");
   const [todoList, setTodoList] = useState<TList[]>([]);
+  const [categoryFilter, setCategoryFilter] = useState<string>("");
 
   useEffect(() => {
     if (userInfo) {
-      const q = query(
-        collection(fireStoreJob, "todos"),
-        where("uid", "==", userInfo.uid)
-      );
-
+      let q;
+      if (categoryFilter === "") {
+        // 모든 카테고리 보기
+        q = query(
+          collection(fireStoreJob, "todos"),
+          where("uid", "==", userInfo.uid)
+        );
+      } else {
+        // 특정 카테고리 필터링
+        q = query(
+          collection(fireStoreJob, "todos"),
+          where("uid", "==", userInfo.uid),
+          where("category", "==", categoryFilter)
+        );
+      }
       const unsubscribe = onSnapshot(q, (querySnapshot) => {
-        const todos = querySnapshot.docs
-          .map((doc) => ({
-            id: doc.id,
-            ...(doc.data() as Omit<TList, "id">),
-          }))
-          .filter((todo) => todo.status !== "DONE");
+        const todos = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...(doc.data() as Omit<TList, "id">),
+        }));
         setTodoList(todos);
       });
 
       return () => unsubscribe();
     }
-  }, [userInfo]);
+  }, [userInfo, categoryFilter]);
 
   const textDeleteHandler = async (id: string) => {
     setTodoList(todoList.filter((item) => item.id !== id));
@@ -53,11 +63,23 @@ export default function TodoList({ userInfo }: TodoListProps) {
         </span>
       </div>
       <div className="todoListContainer">
+        <select
+          value={categoryFilter}
+          onChange={(e) => setCategoryFilter(e.target.value)}
+        >
+          <option value="">모든 능력치</option>
+          <option value="체력">체력</option>
+          <option value="창의력">창의력</option>
+          <option value="지력">지력</option>
+          <option value="정서">정서</option>
+          <option value="재력">재력</option>
+        </select>
         {todoList.map((item) => (
           <TodoItem
             id={item.id}
             text={item.text}
             status={item.status}
+            category={item.category}
             onDelete={textDeleteHandler}
           />
         ))}

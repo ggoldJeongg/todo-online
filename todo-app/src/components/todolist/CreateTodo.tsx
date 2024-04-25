@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { addDoc, collection } from "firebase/firestore";
 import { fireStoreJob } from "../../initFirebase";
 import { UserInterface } from "../../interfaces/user.interface";
@@ -19,6 +19,8 @@ export default function CreateTodo({
   inputText,
   setInputText,
 }: CreateTodoProps) {
+  const [selectedCategory, setSelectedCategory] = useState<string>("체력");
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (inputText.trim() === "") {
@@ -31,7 +33,7 @@ export default function CreateTodo({
       await addDoc(collection(fireStoreJob, "todos"), {
         uid: userInfo.uid,
         text: inputText,
-        completed: false,
+        category: selectedCategory,
         createdAt: new Date(),
       });
     } else {
@@ -44,6 +46,16 @@ export default function CreateTodo({
   return (
     <div className="todoCreateContainer">
       <form onSubmit={handleSubmit}>
+        <select
+          value={selectedCategory}
+          onChange={(e) => setSelectedCategory(e.target.value)}
+        >
+          <option value="체력">체력</option>
+          <option value="창의력">창의력</option>
+          <option value="지력">지력</option>
+          <option value="정서">정서</option>
+          <option value="재력">재력</option>
+        </select>
         <input
           type="text"
           placeholder="할 일을 입력하세요."
