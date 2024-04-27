@@ -41,7 +41,11 @@ export default function TodoItem({
     const ref = doc(fireStoreJob, "todos", id);
     await updateDoc(ref, {
       status: "DONE",
-    });
+    })
+      .then(() => {
+        onDelete(id);
+      })
+      .catch((error) => {});
   };
 
   const onClickDelete = async () => {

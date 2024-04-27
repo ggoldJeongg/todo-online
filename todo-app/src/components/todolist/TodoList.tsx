@@ -4,6 +4,7 @@ import TodoItem from "./TodoItem";
 import { collection, query, where, onSnapshot } from "firebase/firestore";
 import { UserInterface } from "../../interfaces/user.interface";
 import { fireStoreJob } from "../../initFirebase";
+import AbilityGraph from "../abilitylist/AbilityGraph";
 
 export interface TodoListProps {
   userInfo: UserInterface | null;
@@ -28,14 +29,16 @@ export default function TodoList({ userInfo }: TodoListProps) {
         // 모든 카테고리 보기
         q = query(
           collection(fireStoreJob, "todos"),
-          where("uid", "==", userInfo.uid)
+          where("uid", "==", userInfo.uid),
+          where("status", "!=", "DONE")
         );
       } else {
         // 특정 카테고리 필터링
         q = query(
           collection(fireStoreJob, "todos"),
           where("uid", "==", userInfo.uid),
-          where("category", "==", categoryFilter)
+          where("category", "==", categoryFilter),
+          where("status", "!=", "DONE")
         );
       }
       const unsubscribe = onSnapshot(q, (querySnapshot) => {
@@ -76,6 +79,7 @@ export default function TodoList({ userInfo }: TodoListProps) {
         </select>
         {todoList.map((item) => (
           <TodoItem
+            key={item.id}
             id={item.id}
             text={item.text}
             status={item.status}
@@ -89,6 +93,7 @@ export default function TodoList({ userInfo }: TodoListProps) {
           setInputText={setInputText}
         />
       </div>
+      <AbilityGraph />
     </div>
   );
 }

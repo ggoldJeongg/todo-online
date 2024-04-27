@@ -9,11 +9,6 @@ interface CreateTodoProps {
   setInputText: React.Dispatch<React.SetStateAction<string>>;
 }
 
-// interface InputTextProps {
-//   inputText: string;
-//   setInputText: React.Dispatch<React.SetStateAction<string>>;
-// }
-
 export default function CreateTodo({
   userInfo,
   inputText,
@@ -33,6 +28,7 @@ export default function CreateTodo({
       await addDoc(collection(fireStoreJob, "todos"), {
         uid: userInfo.uid,
         text: inputText,
+        status: "ACTIVE",
         category: selectedCategory,
         createdAt: new Date(),
       });
