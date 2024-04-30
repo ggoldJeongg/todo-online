@@ -42,6 +42,18 @@ const MyRadarChart = () => {
         aspectRatio: 1,
       },
     ],
+
+    options: {
+      plugins: {
+        title: {
+          display: true,
+          text: "Custom Font Chart",
+          font: {
+            size: 30,
+          },
+        },
+      },
+    },
   });
 
   useEffect(() => {
@@ -82,8 +94,10 @@ const MyRadarChart = () => {
 };
 
 const ChartContainer = styled.div`
-  width: 40%;
-  height: auto;
+  width: 70%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 export default MyRadarChart;

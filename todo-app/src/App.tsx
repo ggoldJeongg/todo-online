@@ -4,7 +4,6 @@ import { onAuthStateChanged } from "firebase/auth";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { AppRouter } from "./routes/Router";
 import { UserInterface } from "./interfaces/user.interface";
-import Logout from "./pages/logout/logout";
 
 const App = () => {
   const [init, setInit] = useState<boolean>(false);
@@ -41,7 +40,6 @@ const App = () => {
     <>
       {init ? (
         <>
-          {isLogin && <Logout />}
           <AppRouter isLogin={isLogin} userInfo={userInfo} />
         </>
       ) : (

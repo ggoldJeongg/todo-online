@@ -2,6 +2,13 @@ import React, { useState } from "react";
 import { addDoc, collection } from "firebase/firestore";
 import { fireStoreJob } from "../../initFirebase";
 import { UserInterface } from "../../interfaces/user.interface";
+import {
+  TodoCreateContainer,
+  StyledForm,
+  StyledSelect,
+  StyledInput,
+  StyledButton,
+} from "../../styles/CreateTodo.styled";
 
 interface CreateTodoProps {
   userInfo: UserInterface | null;
@@ -40,26 +47,28 @@ export default function CreateTodo({
   };
 
   return (
-    <div className="todoCreateContainer">
-      <form onSubmit={handleSubmit}>
-        <select
-          value={selectedCategory}
-          onChange={(e) => setSelectedCategory(e.target.value)}
-        >
-          <option value="체력">체력</option>
-          <option value="창의력">창의력</option>
-          <option value="지력">지력</option>
-          <option value="정서">정서</option>
-          <option value="재력">재력</option>
-        </select>
-        <input
-          type="text"
-          placeholder="할 일을 입력하세요."
-          value={inputText}
-          onChange={(e) => setInputText(e.target.value)}
-        />
-        <button type="submit">등록하기</button>
-      </form>
-    </div>
+    <>
+      <TodoCreateContainer>
+        <StyledForm onSubmit={handleSubmit}>
+          <StyledSelect
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+          >
+            <option value="체력">체력</option>
+            <option value="창의력">창의력</option>
+            <option value="지력">지력</option>
+            <option value="정서">정서</option>
+            <option value="재력">재력</option>
+          </StyledSelect>
+          <StyledInput
+            type="text"
+            placeholder="할 일을 입력하세요."
+            value={inputText}
+            onChange={(e) => setInputText(e.target.value)}
+          />
+          <StyledButton type="submit">할일 추가</StyledButton>
+        </StyledForm>
+      </TodoCreateContainer>
+    </>
   );
 }
