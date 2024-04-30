@@ -40,7 +40,9 @@ const App = () => {
     <>
       {" "}
       {init ? (
-        <AppRouter isLogin={isLogin} userInfo={userInfo} />
+        <>
+          <AppRouter isLogin={isLogin} userInfo={userInfo} />
+        </>
       ) : (
         "Initializing..."
       )}

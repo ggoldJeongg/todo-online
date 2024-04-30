@@ -1,13 +1,28 @@
 import { useState } from "react";
 import { updateDoc, doc, deleteDoc } from "firebase/firestore";
 import { fireStoreJob } from "../../initFirebase";
-import { TodoText, TodoContainer } from "../../styles/TodoItem.styled";
+import {
+  TodoText,
+  TodoContainer,
+  CheckboxButton,
+  IconButton,
+  ModifyContainer,
+} from "../../styles/TodoItem.styled";
+import {
+  StyledForm,
+  StyledInput,
+  StyledButton,
+} from "../../styles/CreateTodo.styled";
+import { ReactComponent as Checkbox } from "../../assets/icon/Checkbox.svg";
+import { ReactComponent as DeleteIcon } from "../../assets/icon/DeleteIcon.svg";
+import { ReactComponent as WriteIcon } from "../../assets/icon/WriteIcon.svg";
 
 interface TodoItemProps {
   id: string;
   text: string;
   status: string;
   onDelete(id: string): void;
+  onComplete(id: string): void;
   category: string;
 }
 
@@ -56,36 +71,37 @@ export default function TodoItem({
         <TodoContainer>
           <div className="buttonContainer">
             {status !== "DONE" && (
-              <button onClick={onClickComplete} id={id}>
-                완료하기
-              </button>
+              <CheckboxButton onClick={onClickComplete} id={id}>
+                <Checkbox />
+              </CheckboxButton>
             )}
           </div>
           <TodoText status={status}>{text}</TodoText>
           <div className="buttonContainer">
-            <button type="button" onClick={() => setIsUpdating(true)}>
-              수정
-            </button>
-            <button type="button" onClick={onClickDelete}>
-              삭제
-            </button>
+            <IconButton type="button" onClick={() => setIsUpdating(true)}>
+              <WriteIcon />
+            </IconButton>
+            <IconButton type="button" onClick={onClickDelete}>
+              <DeleteIcon />
+            </IconButton>
           </div>
         </TodoContainer>
       ) : (
         <TodoContainer>
-          <form onSubmit={handleFormSubmit}>
-            <input
+          <StyledForm onSubmit={handleFormSubmit}>
+            <StyledInput
               type="text"
+              placeholder="수정할 내용을 입력하세요."
               value={updatedText}
               onChange={handleInputChange}
             />
-            <div className="buttonContainer">
-              <button type="submit">확인</button>
-              <button type="button" onClick={() => setIsUpdating(false)}>
+            <ModifyContainer>
+              <StyledButton type="submit">확인</StyledButton>
+              <StyledButton type="button" onClick={() => setIsUpdating(false)}>
                 취소
-              </button>
-            </div>
-          </form>
+              </StyledButton>
+            </ModifyContainer>
+          </StyledForm>
         </TodoContainer>
       )}
     </div>

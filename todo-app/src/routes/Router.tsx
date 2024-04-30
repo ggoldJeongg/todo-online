@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { UserInterface } from "../interfaces/user.interface";
 import { SignUp } from "../pages/signup/signUp";
 import { Login } from "../pages/signup/login";
+import { Link } from "react-router-dom";
 import TodoList from "../components/todolist/TodoList";
 
 type AppRouterType = {
@@ -16,12 +17,17 @@ export const AppRouter = ({ isLogin, userInfo }: AppRouterType) => {
       <Routes>
         {isLogin ? (
           <>
-            <Route path="/" element={<TodoList userInfo={userInfo} />}></Route>
+            <Route
+              path="/todo"
+              element={<TodoList userInfo={userInfo} />}
+            ></Route>
           </>
         ) : (
           <>
-            <Route path="/" element={<Login />}></Route>
-            <Route path="/signup" element={<SignUp />}></Route>
+            <Route path="/" element={<Link to="/todo" />} />
+            <Route path="/todo" element={<TodoList userInfo={userInfo} />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<SignUp />} />{" "}
           </>
         )}
       </Routes>

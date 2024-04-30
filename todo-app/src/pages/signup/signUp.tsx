@@ -1,16 +1,10 @@
 import React, { ChangeEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
-
-// FIREBASE
 import { firebaseAuth, fireStoreJob } from "../../initFirebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { collection, addDoc } from "firebase/firestore";
-
-// INTERFACE
 import { UserInputInterface } from "../../interfaces/user.interface";
-
-// CSS
 import { UserForm } from "../../styles/userForm.styled";
 import { Button, TextField } from "@mui/material";
 
