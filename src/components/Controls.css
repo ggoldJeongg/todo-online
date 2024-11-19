@@ -1,0 +1,9 @@
+.controls {
+    display: flex;
+    gap: 60px;
+}
+
+.input {
+    flex-grow: 1;
+    border: 1px solid gray;
+}
