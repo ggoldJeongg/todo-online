@@ -7,6 +7,10 @@ import { useState, useRef } from "react";
 function App() {
   const idRef = useRef(0);
   const [list, setList] = useState([]);
+  const [filterType, setFilterType] = useState("ALL");
+  const handleChangeFilterType = (type) => {
+    setFilterType(type);
+  };
   const handleSubmit = (value) => {
     setList((prevList) =>
       prevList.concat({
@@ -51,13 +55,26 @@ function App() {
       })
     );
   };
+  const filteredList = list.filter((item) => {
+    if (filterType === "ALL") {
+      return item;
+    } else if (filterType === "TODO") {
+      return !item.completed;
+    } else {
+      return item.completed;
+    }
+  });
   return (
     <div>
       <Layout>
         <Title />
-        <Controls onSubmit={handleSubmit} />
+        <Controls
+          filterType={filterType}
+          onChangeFilterType={handleChangeFilterType}
+          onSubmit={handleSubmit}
+        />
         <TodoList
-          data={list}
+          data={filteredList}
           onToggle={handleToggle}
           onToggleAll={hadnleToggleAll}
           onDelete={handleDelete}
