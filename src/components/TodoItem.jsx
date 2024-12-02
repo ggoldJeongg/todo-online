@@ -1,7 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import "./TodoItem.css";
 
-const TodoItem = ({ text, completed, onToggle, onDelete }) => {
+const TodoItem = ({ id, text, completed, onToggle, onDelete, onUpdate }) => {
+  const [edit, setEdit] = useState(false);
+  const handleEdit = () => {
+    setEdit((prev) => !prev);
+  };
+  const handleChange = (e) => {
+    onUpdate(id, e.target.value);
+  };
   return (
     <div className="todo-item">
       <input
@@ -10,8 +17,20 @@ const TodoItem = ({ text, completed, onToggle, onDelete }) => {
         checked={completed}
         onChange={onToggle}
       />
-      <p className="todo-item-text">{text}</p>
-      <button className="todo-item-button">수정</button>
+      {edit ? (
+        <input
+          className="todo-edit-input"
+          value={text}
+          onChange={handleChange}
+        />
+      ) : (
+        <p className={["todo-item-text", completed && "completed"].join(" ")}>
+          {text}
+        </p>
+      )}
+      <button className="todo-item-button" onClick={handleEdit}>
+        수정
+      </button>
       <button className="todo-item-button" onClick={onDelete}>
         삭제
       </button>

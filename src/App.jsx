@@ -37,6 +37,20 @@ function App() {
   const handleDelete = (id) => {
     setList((prevList) => prevList.filter((item) => item.id !== id));
   };
+  const handleDeleteCompleted = () => {
+    setList((prevList) => prevList.filter((item) => !item.completed));
+  };
+
+  const handleUpdate = (id, text) => {
+    setList((prevList) =>
+      prevList.map((item) => {
+        if (item.id === id) {
+          return { ...item, text };
+        }
+        return item;
+      })
+    );
+  };
   return (
     <div>
       <Layout>
@@ -47,6 +61,8 @@ function App() {
           onToggle={handleToggle}
           onToggleAll={hadnleToggleAll}
           onDelete={handleDelete}
+          onDeleteCompleted={handleDeleteCompleted}
+          onUpdate={handleUpdate}
         />
       </Layout>
     </div>
