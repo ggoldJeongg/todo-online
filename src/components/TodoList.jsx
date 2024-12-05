@@ -1,18 +1,30 @@
-import React from "react";
+import React, { useContext } from "react";
+import { TodoContext } from "../context";
 import "./TodoList.css";
 import TodoItem from "./TodoItem";
+import { DELETE_TODO_COMPLETED, TOGGLE_TODO_ALL } from "../reducer";
 
-const TodoList = ({
-  data,
-  onToggle,
-  onToggleAll,
-  onDelete,
-  onDeleteCompleted,
-  onUpdate,
-}) => {
+const TodoList = () => {
+  const { state, dispatch } = useContext(TodoContext);
+  const completedCount = state.list.filter((item) => item.completed).length;
+  const handleToggleAll = (e) => {
+    dispatch({ type: TOGGLE_TODO_ALL, payload: e.target.checked });
+  };
+  const handleDeleteCompleted = () => {
+    dispatch({ type: DELETE_TODO_COMPLETED });
+  };
+  const filteredList = state.list.filter((item) => {
+    switch (state.filterType) {
+      case "TODO":
+        return !item.completed;
+      case "COMPLETED":
+        return item.completed;
+      default:
+        return true;
+    }
+  });
   const isAllCompleted =
-    data.length > 0 && data.every((item) => item.completed);
-  const completedCount = data.filter((item) => item.completed).length;
+    filteredList.length > 0 && filteredList.every((item) => item.completed);
   return (
     <div className="todo-list">
       <div className="todo-header">
@@ -20,26 +32,21 @@ const TodoList = ({
           type="checkbox"
           className="todo-checkbox"
           checked={isAllCompleted}
-          onChange={(e) => onToggleAll(e.target.checked)}
+          onChange={handleToggleAll}
         />
         <p className="todo-header-text">할일1</p>
         {completedCount > 0 && (
-          <button className="todo-header-button" onClick={onDeleteCompleted}>
+          <button
+            className="todo-header-button"
+            onClick={handleDeleteCompleted}
+          >
             {completedCount}개 선택 삭제
           </button>
         )}
       </div>
       <div>
-        {data.map((item) => (
-          <TodoItem
-            key={item.id}
-            id={item.id}
-            text={item.text}
-            completed={item.completed}
-            onToggle={() => onToggle(item.id)}
-            onDelete={() => onDelete(item.id)}
-            onUpdate={onUpdate}
-          />
+        {filteredList.map((item) => (
+          <TodoItem key={item.id} {...item} />
         ))}
       </div>
     </div>
