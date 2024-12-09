@@ -1,21 +1,23 @@
-.todo-item {
+import styled from "@emotion/styled";
+
+export const TodoItemContainer = styled.div`
   display: flex;
   align-items: center;
   height: 40px;
   padding: 0 12px;
   gap: 12px;
-}
+`;
 
-.todo-item-text {
+export const TodoText = styled.p`
   flex-grow: 1;
   color: white;
-}
+`;
 
-.todo-item-text.completed {
+export const TodoItemCompleted = styled.p`
   text-decoration: line-through;
-}
+`;
 
-.todo-edit-input {
+export const TodoEditInput = styled.input`
   flex-grow: 1;
   border: 1px solid gray;
   border-radius: 6px;
@@ -24,18 +26,18 @@
   font-size: 14px;
   line-height: 20px;
   color: white;
-}
+`;
 
-.todo-item-button {
+export const TodoItemButton = styled.button`
   border: 1px solid gray;
   border-radius: 6px;
   background-color: transparent;
   padding: 0 12px;
   flex-shrink: 0;
   color: white;
-}
+`;
 
-.todo-checkbox {
+export const TodoCheckbox = styled.input`
   width: 16px;
   height: 16px;
-}
+`;

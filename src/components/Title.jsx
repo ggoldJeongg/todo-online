@@ -1,7 +1,7 @@
-import "./Title.css";
+import { Container } from "./Title.styles";
 
 function Title() {
-    return <h2 className="title">TODAY QUEST</h2>;
+  return <Container>TODAY QUEST</Container>;
 }
 
 export default Title;

@@ -1,6 +1,12 @@
 import React, { useContext } from "react";
 import { TodoContext } from "../context";
-import "./TodoList.css";
+import {
+  TodoCheckbox,
+  TodoHeader,
+  TodoHeaderButton,
+  TodoHeaderText,
+  TodoListDiv,
+} from "./TodoList.styles";
 import TodoItem from "./TodoItem";
 import { DELETE_TODO_COMPLETED, TOGGLE_TODO_ALL } from "../reducer";
 
@@ -26,30 +32,26 @@ const TodoList = () => {
   const isAllCompleted =
     filteredList.length > 0 && filteredList.every((item) => item.completed);
   return (
-    <div className="todo-list">
-      <div className="todo-header">
-        <input
+    <TodoListDiv>
+      <TodoHeader>
+        <TodoCheckbox
           type="checkbox"
-          className="todo-checkbox"
           checked={isAllCompleted}
           onChange={handleToggleAll}
         />
-        <p className="todo-header-text">할일1</p>
+        <TodoHeaderText>할일1 </TodoHeaderText>
         {completedCount > 0 && (
-          <button
-            className="todo-header-button"
-            onClick={handleDeleteCompleted}
-          >
+          <TodoHeaderButton onClick={handleDeleteCompleted}>
             {completedCount}개 선택 삭제
-          </button>
+          </TodoHeaderButton>
         )}
-      </div>
-      <div>
+      </TodoHeader>
+      <TodoHeaderText>
         {filteredList.map((item) => (
           <TodoItem key={item.id} {...item} />
         ))}
-      </div>
-    </div>
+      </TodoHeaderText>
+    </TodoListDiv>
   );
 };
 
