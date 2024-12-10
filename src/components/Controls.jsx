@@ -1,6 +1,6 @@
 import { TodoContext } from "../context";
 import { ADD_TODO, SET_FILTER } from "../reducer";
-import "./Controls.css";
+import { Control, Input, Button, Select } from "./Controls.styles";
 import React, { useContext, useState } from "react";
 
 const Controls = () => {
@@ -17,26 +17,15 @@ const Controls = () => {
     dispatch({ type: SET_FILTER, payload: e.target.value });
   };
   return (
-    <div className="controls">
-      <input
-        type="text"
-        className="input"
-        value={text}
-        onChange={handleChange}
-      />
-      <button className="button" onClick={handleSubmit}>
-        추가
-      </button>
-      <select
-        className="select"
-        value={state.filterType}
-        onChange={handleChangeFilterType}
-      >
+    <Control>
+      <Input type="text" value={text} onChange={handleChange} />
+      <Button onClick={handleSubmit}>추가</Button>
+      <Select value={state.filterType} onChange={handleChangeFilterType}>
         <option value="ALL">전체</option>
         <option value="TODO">할 일</option>
         <option value="COMPLETED">완료</option>
-      </select>
-    </div>
+      </Select>
+    </Control>
   );
 };
 

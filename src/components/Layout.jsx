@@ -1,7 +1,7 @@
-import "./Layout.css"
+import { Container } from "./Layout.styles";
 
-function Layount ( {children} ) {
-  return <div className="Layout">{children}</div>
+function Layount({ children }) {
+  return <Container>{children}</Container>;
 }
 
 export default Layount;

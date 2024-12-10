@@ -1,7 +1,14 @@
 import React, { useState, useContext } from "react";
 import { TodoContext } from "../context";
-import "./TodoItem.css";
 import { DELETE_TODO, TOGGLE_TODO, UPDATE_TODO } from "../reducer";
+import {
+  TodoItemContainer,
+  TodoText,
+  TodoItemCompleted,
+  TodoEditInput,
+  TodoItemButton,
+  TodoCheckbox,
+} from "./TodoItem.styles";
 
 const TodoItem = ({ id, text, completed }) => {
   const { dispatch } = useContext(TodoContext);
@@ -20,31 +27,20 @@ const TodoItem = ({ id, text, completed }) => {
   };
 
   return (
-    <div className="todo-item">
-      <input
+    <TodoItemContainer>
+      <TodoCheckbox
         type="checkbox"
-        className="todo-item-checkbox"
         checked={completed}
         onChange={handleToggle}
       />
       {edit ? (
-        <input
-          className="todo-edit-input"
-          value={text}
-          onChange={handleChange}
-        />
+        <TodoEditInput value={text} onChange={handleChange} />
       ) : (
-        <p className={["todo-item-text", completed && "completed"].join(" ")}>
-          {text}
-        </p>
+        <TodoText>{text}</TodoText>
       )}
-      <button className="todo-item-button" onClick={handleEdit}>
-        수정
-      </button>
-      <button className="todo-item-button" onClick={handleDelete}>
-        삭제
-      </button>
-    </div>
+      <TodoItemButton onClick={handleEdit}>수정</TodoItemButton>
+      <TodoItemButton onClick={handleDelete}>삭제</TodoItemButton>
+    </TodoItemContainer>
   );
 };
 
